@@ -6,7 +6,10 @@ Este es un proyecto de facturación desarrollado para gestionar usuarios y opera
 
 ### Tecnologías Utilizadas
 
-    Backend: Node.js, Express
-    Base de Datos: PostgreSQL
-    ORM: pg (para interactuar con PostgreSQL)
-    Autenticación: bcryptjs (para el hash de contraseñas)
+• Backend: Node.js, Express
+
+• Base de Datos: PostgreSQL
+
+• ORM: pg (para interactuar con PostgreSQL)
+
+• Autenticación: bcryptjs (para el hash de contraseñas)
