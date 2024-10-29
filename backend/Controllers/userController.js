@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 // Controlador para registrar un nuevo usuario
 exports.registerUser = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     try {
         // Verifica si el usuario ya existe (puedes hacer esto en tu base de datos)
@@ -16,7 +16,11 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insertar el nuevo usuario en la base de datos
-        const newUser = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, hashedPassword]);
+        const newUser = await pool.query(
+            'INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *', 
+            [username, hashedPassword, email]
+        );
+        
 
         res.status(201).json({ message: 'Usuario registrado', user: newUser.rows[0] });
     } catch (err) {
