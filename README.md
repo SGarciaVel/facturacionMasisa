@@ -20,7 +20,7 @@ Este proyecto corresponde al backend de una aplicación de facturación diseñad
 
 1. **Clonar el repositorio**:
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/SGarciaVel/facturacionMasisa.git
     cd facturacionMasisa/backend
     ```
 
