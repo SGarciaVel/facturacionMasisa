@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./Routes/userRoutes');
+const authMiddleware = require('./middleware/authMiddleware');
+
 const app = express();
 const PORT = 3000; // Puedes cambiar el puerto si lo necesitas
-const authMiddleware = require('./middleware/authMiddleware');
 
 // Middleware
 app.use(cors());
