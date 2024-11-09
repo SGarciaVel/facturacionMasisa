@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
@@ -9,32 +10,67 @@ const generateToken = (userId) => {
     });
 };
 
+const generateCode = () => {
+    return Math.random().toString(36).substr(2, 6).toUpperCase();
+};
+
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
+
 exports.registerUser = async (req, res) => {
-    const { username, password, email } = req.body;
+    const { nombre, apellido, email, password, pais, fechaNacimiento } = req.body;
 
     try {
-        
-        const userExists = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userExists.rows.length > 0) {
-            return res.status(400).json({ message: 'Usuario ya existe' });
+            return res.status(400).json({ message: 'El correo ya está registrado.' });
         }
 
-        // Hashear la contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
+        const verificationCode = generateCode();
 
-        
-        const newUser = await pool.query(
-            'INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *', 
-            [username, hashedPassword, email]
+        await pool.query(
+            'INSERT INTO users (nombre, apellido, email, password, pais, fecha_nacimiento, verification_code, is_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+            [nombre, apellido, email, hashedPassword, pais, fechaNacimiento, verificationCode, false]
         );
-        
 
-        res.status(201).json({ message: 'Usuario registrado', user: newUser.rows[0] });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error al registrar el usuario' });
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Código de Verificación',
+            text: `Tu código de verificación es: ${verificationCode}`,
+        });
+
+        res.status(200).json({ message: 'Registro exitoso. Verifica tu correo para completar el proceso.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al registrar el usuario.' });
     }
 };
+
+exports.verifyCode = async (req, res) => {
+    const { email, code } = req.body;
+
+    try {
+        const userResult = await pool.query('SELECT * FROM users WHERE email = $1 AND verification_code = $2', [email, code]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(400).json({ message: 'Código de verificación incorrecto o expirado.' });
+        }
+
+        await pool.query('UPDATE users SET is_verified = true WHERE email = $1', [email]);
+        res.status(200).json({ message: 'Verificación exitosa. Ya puedes iniciar sesión.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al verificar el código.' });
+    }
+};
+
 
 
 exports.loginUser = async (req, res) => {
