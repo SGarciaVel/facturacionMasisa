@@ -23,6 +23,7 @@ El sistema incluye:
 - **PostgreSQL**: Base de datos relacional para almacenamiento de usuarios.
 - **JWT**: Autenticación de usuarios.
 - **bcrypt.js**: Encriptación de contraseñas.
+- **Nodemailer**: Envío de correos electrónicos.
 
 ## Instalación
 
@@ -52,11 +53,13 @@ El sistema incluye:
 4. **Configurar variables de entorno**:
    - Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
      ```env
+     EMAIL_USER=tu_correo@gmail.com
+     EMAIL_PASS=tu_contraseña_de_aplicación
      JWT_SECRET=clave_secreta
      JWT_EXPIRES_IN=1h
-     DB_USER=tu_usuario
-     DB_PASSWORD=tu_contraseña
-     DB_HOST=tu_host
+     DB_USER=tu_usuario_db
+     DB_PASSWORD=tu_contraseña_db
+     DB_HOST=tu_host_db
      DB_PORT=5432
      DB_DATABASE=facturacion_masisa
      ```
@@ -79,15 +82,29 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 
 ### Usuarios
 
-- **Registro de Usuario**
+- **Registro de Usuario con Verificación**
   - **POST** `/api/users/register`
-  - **Descripción**: Registra un nuevo usuario.
+  - **Descripción**: Registra un nuevo usuario y envía un código de verificación al correo.
   - **Cuerpo de la solicitud**:
     ```json
     {
-      "username": "usuario1",
-      "email": "usuario1@masisa.com",
-      "password": "contraseñaSegura"
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "email": "juan.perez@correo.com",
+      "password": "passwordSeguro123",
+      "pais": "Chile",
+      "fechaNacimiento": "1990-01-01"
+    }
+    ```
+
+- **Verificación de Código**
+  - **POST** `/api/users/verify-code`
+  - **Descripción**: Verifica el código enviado al correo para activar la cuenta.
+  - **Cuerpo de la solicitud**:
+    ```json
+    {
+      "email": "juan.perez@correo.com",
+      "code": "ABC123"
     }
     ```
 
@@ -97,19 +114,10 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
   - **Cuerpo de la solicitud**:
     ```json
     {
-      "email": "usuario1@masisa.com",
-      "password": "contraseñaSegura"
+      "email": "juan.perez@correo.com",
+      "password": "passwordSeguro123"
     }
     ```
-
-- **Usuario Autenticado**
-  - **GET** `/api/users/me`
-  - **Descripción**: Devuelve la información del usuario autenticado.
-  - **Encabezado**:
-    ```
-    Authorization: Bearer <token>
-    ```
-
 ### Carga de Archivos CSV
 
 - **Subir Archivo CSV**
@@ -126,10 +134,10 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 
 ## Funcionalidades Actuales
 
-- Registro de usuarios con contraseñas encriptadas.
-- Autenticación mediante tokens JWT.
-- Carga y procesamiento de archivos CSV para la gestión de facturación.
-- Rutas protegidas para garantizar la seguridad de los datos.
+- Registro de usuarios con código de verificación por correo.
+- Verificación de cuenta mediante código.
+- Inicio de sesión con autenticación JWT.
+- Rutas protegidas con verificación de token.
 
 ## Próximos Pasos
 
