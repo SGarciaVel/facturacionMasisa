@@ -15,7 +15,6 @@ El sistema incluye:
   - [Carga de Archivos CSV](#carga-de-archivos-csv)
 - [Funcionalidades Actuales](#funcionalidades-actuales)
 - [Próximos Pasos](#próximos-pasos)
-- [Contribución](#contribución)
 - [Licencia](#licencia)
 
 
@@ -146,14 +145,6 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 - **Pruebas**:
   - Implementar pruebas unitarias e integrales para asegurar la calidad del software.
 
-## Contribución
-
-Si deseas contribuir al proyecto, sigue estos pasos:
-1. Crea un fork del repositorio.
-2. Crea una rama nueva (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -m "feat: nueva funcionalidad"`).
-4. Sube los cambios a tu fork (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request.
 
 ## Licencia
 
