@@ -1,15 +1,44 @@
+# Facturación Masisa - Backend
 
-# Proyecto Facturación Masisa
-## Descripción
+Este proyecto corresponde al backend de una aplicación de facturación diseñada para la gestión del área de telecomunicaciones en Masisa. Proporciona endpoints para el registro, inicio de sesión y autenticación de usuarios mediante JWT.
 
-Este es un proyecto de facturación desarrollado para gestionar usuarios y operaciones relacionadas. Utiliza Node.js con Express en el backend y PostgreSQL como base de datos.
+## Tabla de Contenidos
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Instalación](#instalación)
+- [Configuración](#configuración)
+- [Rutas de la API](#rutas-de-la-api)
+- [Funcionalidades Actuales](#funcionalidades-actuales)
+- [Próximos Pasos](#próximos-pasos)
 
-### Tecnologías Utilizadas
+## Tecnologías Utilizadas
+- **Node.js** y **Express**: Framework para el backend y manejo de rutas.
+- **PostgreSQL**: Base de datos relacional para almacenamiento de usuarios.
+- **JWT**: Autenticación de usuarios.
+- **bcrypt.js**: Encriptación de contraseñas.
 
-• Backend: Node.js, Express
+## Instalación
 
-• Base de Datos: PostgreSQL
+1. **Clonar el repositorio**:
+    ```bash
+    git clone https://github.com/SGarciaVel/facturacionMasisa.git
+    cd facturacionMasisa/backend
+    ```
 
-• ORM: pg (para interactuar con PostgreSQL)
+2. **Instalar dependencias**:
+    ```bash
+    npm install
+    ```
 
-• Autenticación: bcryptjs (para el hash de contraseñas)
+3. **Configurar la base de datos**:
+   - Asegúrate de tener PostgreSQL configurado y en funcionamiento.
+   - Crea una base de datos llamada `facturacion_masisa` o según tu preferencia.
+   - Usa el siguiente esquema SQL para crear la tabla `users`:
+     ```sql
+     CREATE TABLE users (
+         id SERIAL PRIMARY KEY,
+         username VARCHAR(50) UNIQUE NOT NULL,
+         email VARCHAR(100) UNIQUE NOT NULL,
+         password VARCHAR(255) NOT NULL
+     );
+     ```
+
