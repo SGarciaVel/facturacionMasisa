@@ -3,6 +3,9 @@ const csv = require('csv-parser');
 
 exports.processCsv = (req, res) => {
     const results = [];
+    if (!req.file) {
+        return res.status(400).json({ message: 'No se proporcionó un archivo CSV.' });
+    }
     const filePath = req.file.path; // Ruta temporal del archivo cargado
 
     // Lee y procesa el archivo CSV

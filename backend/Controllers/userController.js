@@ -36,6 +36,7 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -57,8 +58,12 @@ exports.loginUser = async (req, res) => {
         // Generar el token JWT
         const token = generateToken(user.id);
 
-        // Si todo es correcto, responde con un mensaje de éxito
-        res.status(200).json({ message: 'Inicio de sesión exitoso', user: { id: user.id, email: user.email } });
+        // Si todo es correcto, responde con el token
+        res.status(200).json({ 
+            message: 'Inicio de sesión exitoso', 
+            token, 
+            user: { id: user.id, email: user.email } 
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error al iniciar sesión' });
