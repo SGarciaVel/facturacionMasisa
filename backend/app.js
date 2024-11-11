@@ -11,15 +11,15 @@ const PORT = 3000; // Puedes cambiar el puerto si lo necesitas
 // Middleware
 // Configurar CORS
 app.use(cors({
-    origin: 'http://localhost:5173',  // Permitir solicitudes desde el frontend
+    origin: 'http://localhost:5174',  // Permitir solicitudes desde el frontend
 }));
 
 app.use(express.json()); // Para parsear el cuerpo de las solicitudes JSON
 
 // Rutas
-app.use('/api/users', userRoutes); // Aquí se manejarán las rutas de usuario
+app.use('/api/users', userRoutes); // Rutas de usuario
 // Rutas de CSV
-app.use('/api/csv', csvRoutes); // Aquí se manejará la ruta de CSV
+app.use('/api/csv', csvRoutes); // Ruta de CSV
 
 
 // Rutas protegidas
