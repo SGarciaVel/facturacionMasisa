@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Box, Typography, Alert, Avatar, Grid, Paper, CssBaseline } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+
+const theme = createTheme();
 
 const VerifyCode = () => {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [resendSuccess, setResendSuccess] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,66 +31,109 @@ const VerifyCode = () => {
 
   const handleResendCode = async () => {
     try {
-      await axios.post('http://localhost:3000/api/users/resend-code', { email });
-      setResendSuccess(true);
+      await axios.post('http://localhost:3000/api/users/resend-code', {
+        email,
+      });
+      setResendSuccess('Código reenviado exitosamente. Revisa tu correo.');
       setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al reenviar el código');
     }
   };
 
+  const goToLogin = () => {
+    navigate('/login');
+  };
+
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        mx: 'auto',
-        mt: 4,
-        p: 3,
-        border: 1,
-        borderRadius: 2,
-        boxShadow: 3,
-      }}
-    >
-      <Typography variant="h5" align="center" gutterBottom>
-        Verificar Código
-      </Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>Verificación exitosa. Ya puedes iniciar sesión.</Alert>}
-      {resendSuccess && <Alert severity="info" sx={{ mb: 2 }}>Código reenviado con éxito. Revisa tu correo.</Alert>}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Correo Electrónico"
-          name="email"
-          type="email"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: 'url(/Masisa_Wallpapers_Mobile_04.png)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         />
-        <TextField
-          label="Código de Verificación"
-          name="code"
-          fullWidth
-          margin="normal"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          required
-        />
-        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-          Verificar
-        </Button>
-      </form>
-      <Button 
-        variant="outlined" 
-        fullWidth 
-        sx={{ mt: 2 }} 
-        onClick={handleResendCode}
-        disabled={!email}
-      >
-        Reenviar Código
-      </Button>
-    </Box>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Verificar Código
+            </Typography>
+            {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+            {success && <Alert severity="success" sx={{ mt: 2 }}>Verificación exitosa. Ya puedes iniciar sesión.</Alert>}
+            {resendSuccess && <Alert severity="success" sx={{ mt: 2 }}>{resendSuccess}</Alert>}
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Correo Electrónico"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="code"
+                label="Código de Verificación"
+                name="code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Verificar
+              </Button>
+              <Button
+                variant="outlined"
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={handleResendCode}
+                disabled={!email}
+              >
+                Reenviar Código
+              </Button>
+              <Button
+                variant="text"
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={goToLogin}
+              >
+                Volver al Login
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,18 +9,18 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import Select from 'react-select';
 import Flag from 'react-world-flags';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
 const countryOptions = [
   { value: 'CL', label: 'Chile', flag: 'CL' },
-  { value: 'EC', label: 'Ecuador', flag: 'EC'},
+  { value: 'EC', label: 'Ecuador', flag: 'EC' },
   { value: 'CO', label: 'Colombia', flag: 'CO' },
   { value: 'PE', label: 'Perú', flag: 'PE' },
   { value: 'MX', label: 'México', flag: 'MX' },
@@ -82,6 +83,8 @@ export default function Register() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [dateError, setDateError] = useState('');
+  const [resendSuccess, setResendSuccess] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -110,6 +113,22 @@ export default function Register() {
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar el usuario');
     }
+  };
+
+  const handleResendCode = async () => {
+    try {
+      await axios.post('http://localhost:3000/api/users/resend-code', {
+        email: formData.email,
+      });
+      setResendSuccess('Código reenviado exitosamente. Revisa tu correo.');
+      setError('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error al reenviar el código');
+    }
+  };
+
+  const goToVerifyPage = () => {
+    navigate('/verify-code');
   };
 
   return (
@@ -147,7 +166,12 @@ export default function Register() {
               Registrarse
             </Typography>
             {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-            {success && <Alert severity="success" sx={{ mt: 2 }}>Registro exitoso. Revisa tu correo para verificar tu cuenta.</Alert>}
+            {success && (
+              <Alert severity="success" sx={{ mt: 2 }}>
+                Registro exitoso. Revisa tu correo para verificar tu cuenta.
+              </Alert>
+            )}
+            {resendSuccess && <Alert severity="success" sx={{ mt: 2 }}>{resendSuccess}</Alert>}
             {dateError && <Alert severity="error" sx={{ mt: 2 }}>{dateError}</Alert>}
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -203,7 +227,7 @@ export default function Register() {
                 styles={customStyles}
                 placeholder="Selecciona un país"
                 onChange={handleCountryChange}
-                isSearchable={false} // Desactiva la búsqueda
+                isSearchable={false}
               />
               <TextField
                 margin="normal"
@@ -224,6 +248,23 @@ export default function Register() {
                 sx={{ mt: 3, mb: 2 }}
               >
                 Registrarse
+              </Button>
+              <Button
+                variant="outlined"
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={handleResendCode}
+                disabled={!formData.email}
+              >
+                Reenviar Código de Verificación
+              </Button>
+              <Button
+                variant="text"
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={goToVerifyPage}
+              >
+                Ir a Verificar Código
               </Button>
             </Box>
           </Box>
