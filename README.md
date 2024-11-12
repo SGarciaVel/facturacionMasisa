@@ -30,23 +30,28 @@ El sistema incluye:
 
 ## Instalación
 
-1. **Instalar Git**:
-    ```bash
+1. **Instalar Dependencias**:
+   Instalar Git:
+   ```bash
     apt-get install git
-    ```
+   ```
+   Instalar NodeJS:
+   ```bash
+   sudo apt install nodejs
+   ```
 
-1. **Clonar el repositorio**:
+2. **Clonar el repositorio**:
     ```bash
     git clone https://github.com/SGarciaVel/facturacionMasisa.git
     cd facturacionMasisa/backend
     ```
 
-2. **Instalar dependencias**:
+3. **Instalar dependencias**:
     ```bash
     npm install
     ```
 
-3. **Configurar la base de datos**:
+4. **Configurar la base de datos**:
    - Asegúrate de tener PostgreSQL configurado y en funcionamiento.
    - Crea una base de datos llamada `facturacion_masisa` o según tu preferencia.
    - Usa el siguiente esquema SQL para crear la tabla `users`:
@@ -65,7 +70,7 @@ El sistema incluye:
       );
       ```
 
-4. **Configurar variables de entorno**:
+5. **Configurar variables de entorno**:
    - Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
      ```env
      EMAIL_USER=tu_correo@gmail.com
@@ -79,7 +84,7 @@ El sistema incluye:
      DB_DATABASE=facturacion_masisa
      ```
 
-5. **Iniciar el servidor**:
+6. **Iniciar el servidor**:
    - Para desarrollo:
      ```bash
      npm run dev
