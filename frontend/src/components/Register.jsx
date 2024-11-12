@@ -48,26 +48,10 @@ const customStyles = {
     alignItems: 'center',
     padding: '0',
   }),
-  input: (provided) => ({
-    ...provided,
-    margin: '0',
-  }),
   singleValue: (provided) => ({
     ...provided,
     display: 'flex',
     alignItems: 'center',
-  }),
-  menu: (provided) => ({
-    ...provided,
-    zIndex: 9999,
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: state.isSelected ? '#1976d2' : state.isFocused ? '#e3f2fd' : 'white',
-    color: state.isSelected ? 'white' : 'black',
-    padding: 10,
   }),
 };
 
@@ -110,6 +94,7 @@ export default function Register() {
       setSuccess(true);
       setError('');
       setDateError('');
+      navigate('/verify-code', { state: { email: formData.email } }); // Navega a VerifyCode con el email
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar el usuario');
     }
@@ -125,10 +110,6 @@ export default function Register() {
     } catch (err) {
       setError(err.response?.data?.message || 'Error al reenviar el código');
     }
-  };
-
-  const goToVerifyPage = () => {
-    navigate('/verify-code');
   };
 
   return (
@@ -250,21 +231,13 @@ export default function Register() {
                 Registrarse
               </Button>
               <Button
-                variant="outlined"
+                variant="text"
                 fullWidth
                 sx={{ mt: 2 }}
                 onClick={handleResendCode}
                 disabled={!formData.email}
               >
-                Reenviar Código de Verificación
-              </Button>
-              <Button
-                variant="text"
-                fullWidth
-                sx={{ mt: 2 }}
-                onClick={goToVerifyPage}
-              >
-                Ir a Verificar Código
+                Reenviar Código
               </Button>
             </Box>
           </Box>

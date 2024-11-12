@@ -1,12 +1,10 @@
 const express = require('express');
+const { registerUser, verifyCode, resendCode, loginUser } = require('../controllers/userController');
 const router = express.Router();
-const userController = require('../Controllers/userController');
 
-router.post('/register', userController.registerUser);
-router.post('/verify-code', userController.verifyCode);
-
-
-// Ruta para iniciar sesión
-router.post('/login', userController.loginUser);
+router.post('/register', registerUser);
+router.post('/verify-code', verifyCode);
+router.post('/resend-code', resendCode); // Asegúrate de tener esta ruta
+router.post('/login', loginUser);
 
 module.exports = router;

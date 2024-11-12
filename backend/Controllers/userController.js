@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
 // Función para generar un JWT
 const generateToken = (userId) => {
@@ -22,6 +23,8 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const moment = require('moment'); // Para manejo de fechas
+
 exports.registerUser = async (req, res) => {
     const { nombre, apellido, email, password, pais, fechaNacimiento } = req.body;
 
@@ -33,10 +36,11 @@ exports.registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = generateCode();
+        const expirationTime = moment().add(1, 'minute').toISOString(); // Expiración en 1 minuto
 
         await pool.query(
-            'INSERT INTO users (nombre, apellido, email, password, pais, fecha_nacimiento, verification_code, is_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-            [nombre, apellido, email, hashedPassword, pais, fechaNacimiento, verificationCode, false]
+            'INSERT INTO users (nombre, apellido, email, password, pais, fecha_nacimiento, verification_code, verification_code_expiration, is_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+            [nombre, apellido, email, hashedPassword, pais, fechaNacimiento, verificationCode, expirationTime, false]
         );
 
         await transporter.sendMail({
@@ -53,23 +57,35 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+
 exports.verifyCode = async (req, res) => {
-    const { email, code } = req.body;
+    const { code } = req.body;
 
     try {
-        const userResult = await pool.query('SELECT * FROM users WHERE email = $1 AND verification_code = $2', [email, code]);
+        const userResult = await pool.query('SELECT * FROM users WHERE verification_code = $1', [code]);
 
         if (userResult.rows.length === 0) {
             return res.status(400).json({ message: 'Código de verificación incorrecto o expirado.' });
         }
 
-        await pool.query('UPDATE users SET is_verified = true WHERE email = $1', [email]);
+        const user = userResult.rows[0];
+        const currentTime = moment();
+
+        if (currentTime.isAfter(user.verification_code_expiration)) {
+            return res.status(400).json({ message: 'El código de verificación ha expirado. Solicita uno nuevo.' });
+        }
+
+        await pool.query('UPDATE users SET is_verified = true WHERE id = $1', [user.id]);
+
         res.status(200).json({ message: 'Verificación exitosa. Ya puedes iniciar sesión.' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al verificar el código.' });
     }
 };
+
+
+
 
 exports.resendCode = async (req, res) => {
     const { email } = req.body;

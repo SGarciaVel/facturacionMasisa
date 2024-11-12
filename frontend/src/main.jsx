@@ -6,6 +6,7 @@ import Register from './components/Register'; // Ruta para el registro
 import VerifyCode from './components/VerifyCode'; // Ruta para la verificación de código
 import Login from './components/Login';
 import Home from './components/Home';
+import AuthPage from './components/AuthPage';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
   { path: '/verify-code', element: <VerifyCode /> }, // Ruta de verificación
   { path: '/login', element: <Login /> },
   { path: '/home', element: <Home /> },
+  { path: '/authpage', element: <AuthPage /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('app')).render(

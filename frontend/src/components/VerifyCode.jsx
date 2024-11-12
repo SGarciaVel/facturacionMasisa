@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Alert, Avatar, Grid, Paper, CssBaseline } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -8,22 +8,29 @@ import axios from 'axios';
 const theme = createTheme();
 
 const VerifyCode = () => {
-  const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState('');
   const [resendSuccess, setResendSuccess] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.email) {
+      setEmail(location.state.email);
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/users/verify-code', {
-        email,
-        code,
-      });
+      await axios.post('http://localhost:3000/api/users/verify-code', { email, code });
       setSuccess(true);
       setError('');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Redirect after success
     } catch (err) {
       setError(err.response?.data?.message || 'Error al verificar el código');
     }
@@ -31,19 +38,14 @@ const VerifyCode = () => {
 
   const handleResendCode = async () => {
     try {
-      await axios.post('http://localhost:3000/api/users/resend-code', {
-        email,
-      });
+      await axios.post('http://localhost:3000/api/users/resend-code', { email });
       setResendSuccess('Código reenviado exitosamente. Revisa tu correo.');
-      setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al reenviar el código');
     }
   };
 
-  const goToLogin = () => {
-    navigate('/login');
-  };
+  const goToLogin = () => navigate('/login');
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,17 +89,6 @@ const VerifyCode = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Correo Electrónico"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 id="code"
                 label="Código de Verificación"
                 name="code"
@@ -117,7 +108,6 @@ const VerifyCode = () => {
                 fullWidth
                 sx={{ mt: 2 }}
                 onClick={handleResendCode}
-                disabled={!email}
               >
                 Reenviar Código
               </Button>

@@ -11,7 +11,9 @@ const PORT = 3000; // Puedes cambiar el puerto si lo necesitas
 // Middleware
 // Configurar CORS
 app.use(cors({
-    origin: 'http://localhost:5173',  // Permitir solicitudes desde el frontend
+    origin: 'http://localhost:5173', // URL del frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true // Permitir envío de cookies y encabezados de autenticación
 }));
 
 app.use(express.json());
