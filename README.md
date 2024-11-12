@@ -57,9 +57,9 @@ El sistema incluye:
         verification_code VARCHAR(10),
         verification_code_expiration TIMESTAMP,
         is_verified BOOLEAN DEFAULT false
-);
+      );
+      ```
 
-     ```
 4. **Configurar variables de entorno**:
    - Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
      ```env
