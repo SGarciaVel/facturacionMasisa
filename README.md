@@ -32,11 +32,11 @@ El sistema incluye:
 
 1. **Instalar Dependencias**:
    
-   Instalar Git:
+   Instalar `Git`:
    ```bash
     apt-get install git
    ```
-   Instalar NodeJS:
+   Instalar `NodeJS`:
    ```bash
    sudo apt install nodejs
    ```
