@@ -20,15 +20,20 @@ El sistema incluye:
 
 ## Tecnologías Utilizadas
 
-- **Node.js y Express**: Framework para el backend y manejo de rutas.
-- **PostgreSQL**: Base de datos relacional para almacenamiento de usuarios.
-- **JWT**: Autenticación de usuarios.
-- **bcrypt.js**: Encriptación de contraseñas.
-- **Nodemailer**: Envío de correos electrónicos.
-- **React y MUI (Material-UI)**: Desarrollo del frontend con una interfaz moderna.
-- **React-Select**: Implementación de selectores dinámicos con banderas.
+- **Node.js 18.19.1 y Express 4.18.2**: Framework para el backend y manejo de rutas.
+- **PostgreSQL 13.7**: Base de datos relacional para almacenamiento de usuarios.
+- **JWT 9.0.2**: Autenticación de usuarios.
+- **bcrypt.js 2.4.3**: Encriptación de contraseñas.
+- **Nodemailer 6.9.16**: Envío de correos electrónicos.
+- **React 18.3.1 y MUI (Material-UI) 6.1.6**: Desarrollo del frontend con una interfaz moderna.
+- **React-Select 5.8.3**: Implementación de selectores dinámicos con banderas.
 
 ## Instalación
+
+1. **Intalar Git**:
+    ```bash
+    apt-get install git
+    ```
 
 1. **Clonar el repositorio**:
     ```bash
