@@ -19,11 +19,14 @@ El sistema incluye:
 
 
 ## Tecnologías Utilizadas
-- **Node.js** y **Express**: Framework para el backend y manejo de rutas.
+
+- **Node.js y Express**: Framework para el backend y manejo de rutas.
 - **PostgreSQL**: Base de datos relacional para almacenamiento de usuarios.
 - **JWT**: Autenticación de usuarios.
 - **bcrypt.js**: Encriptación de contraseñas.
 - **Nodemailer**: Envío de correos electrónicos.
+- **React y MUI (Material-UI)**: Desarrollo del frontend con una interfaz moderna.
+- **React-Select**: Implementación de selectores dinámicos con banderas.
 
 ## Instalación
 
@@ -44,12 +47,19 @@ El sistema incluye:
    - Usa el siguiente esquema SQL para crear la tabla `users`:
      ```sql
      CREATE TABLE users (
-         id SERIAL PRIMARY KEY,
-         username VARCHAR(50) UNIQUE NOT NULL,
-         email VARCHAR(100) UNIQUE NOT NULL,
-         password VARCHAR(255) NOT NULL
-     );
-     ```
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(50) NOT NULL,
+        apellido VARCHAR(50) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        pais VARCHAR(50) NOT NULL,
+        fecha_nacimiento DATE NOT NULL,
+        verification_code VARCHAR(10),
+        verification_code_expiration TIMESTAMP,
+        is_verified BOOLEAN DEFAULT false
+      );
+      ```
+
 4. **Configurar variables de entorno**:
    - Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
      ```env
@@ -138,11 +148,14 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 - Verificación de cuenta mediante código.
 - Inicio de sesión con autenticación JWT.
 - Rutas protegidas con verificación de token.
+- Carga y procesamiento de archivos CSV.
+- Interfaz de usuario consistente entre login y registro.
 
 ## Próximos Pasos
 
 - **Frontend**:
-  - Desarrollar e integrar la interfaz gráfica de usuario (GUI) utilizando React + Vite.
+  - Mejorar la visualización de datos con gráficos y tablas interactivas.
+  - Implementar una sección de perfil para que los usuarios puedan gestionar sus datos.
   
 - **Visualización de Datos**:
   - Implementar gráficos e informes detallados para el análisis de facturación.
@@ -152,6 +165,7 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 
 - **Pruebas**:
   - Implementar pruebas unitarias e integrales para asegurar la calidad del software.
+
 
 
 ## Licencia
