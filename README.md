@@ -30,7 +30,7 @@ El sistema incluye:
 
 ## Instalación
 
-1. **Intalar Git**:
+1. **Instalar Git**:
     ```bash
     apt-get install git
     ```
