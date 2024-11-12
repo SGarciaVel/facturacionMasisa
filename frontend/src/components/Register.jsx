@@ -19,10 +19,12 @@ const theme = createTheme();
 
 const countryOptions = [
   { value: 'CL', label: 'Chile', flag: 'CL' },
-  { value: 'AR', label: 'Argentina', flag: 'AR' },
-  { value: 'US', label: 'Estados Unidos', flag: 'US' },
-  { value: 'ES', label: 'España', flag: 'ES' },
+  { value: 'EC', label: 'Ecuador', flag: 'EC'},
+  { value: 'CO', label: 'Colombia', flag: 'CO' },
+  { value: 'PE', label: 'Perú', flag: 'PE' },
   { value: 'MX', label: 'México', flag: 'MX' },
+  { value: 'VE', label: 'Venezuela', flag: 'VE' },
+  { value: 'US', label: 'Estados Unidos', flag: 'US' },
 ];
 
 const customStyles = {
@@ -33,21 +35,21 @@ const customStyles = {
     borderColor: '#c4c4c4',
     padding: '0 10px',
     boxShadow: 'none',
-    height: '56px', // Misma altura que TextField
+    height: '56px',
     display: 'flex',
     alignItems: 'center',
     '&:hover': { borderColor: '#1976d2' },
   }),
   valueContainer: (provided) => ({
     ...provided,
-    height: '40%', // Centrado vertical
+    height: '40%',
     display: 'flex',
     alignItems: 'center',
     padding: '0',
   }),
   input: (provided) => ({
     ...provided,
-    margin: '0', // Elimina espacio adicional
+    margin: '0',
   }),
   singleValue: (provided) => ({
     ...provided,
