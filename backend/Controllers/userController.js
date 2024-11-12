@@ -71,7 +71,35 @@ exports.verifyCode = async (req, res) => {
     }
 };
 
-
+exports.resendCode = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  
+      if (userResult.rows.length === 0) {
+        return res.status(400).json({ message: 'Correo no registrado.' });
+      }
+  
+      const user = userResult.rows[0];
+      const newCode = generateCode();
+      
+      await pool.query('UPDATE users SET verification_code = $1 WHERE email = $2', [newCode, email]);
+  
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Nuevo Código de Verificación',
+        text: `Tu nuevo código de verificación es: ${newCode}`,
+      });
+  
+      res.status(200).json({ message: 'Código reenviado exitosamente.' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al reenviar el código.' });
+    }
+  };
+  
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;

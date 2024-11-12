@@ -7,11 +7,12 @@ const VerifyCode = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/users/verify-code', {
+      await axios.post('http://localhost:3000/api/users/verify-code', {
         email,
         code,
       });
@@ -19,6 +20,16 @@ const VerifyCode = () => {
       setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al verificar el código');
+    }
+  };
+
+  const handleResendCode = async () => {
+    try {
+      await axios.post('http://localhost:3000/api/users/resend-code', { email });
+      setResendSuccess(true);
+      setError('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error al reenviar el código');
     }
   };
 
@@ -37,8 +48,9 @@ const VerifyCode = () => {
       <Typography variant="h5" align="center" gutterBottom>
         Verificar Código
       </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
-      {success && <Alert severity="success">Verificación exitosa. Ya puedes iniciar sesión.</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {success && <Alert severity="success" sx={{ mb: 2 }}>Verificación exitosa. Ya puedes iniciar sesión.</Alert>}
+      {resendSuccess && <Alert severity="info" sx={{ mb: 2 }}>Código reenviado con éxito. Revisa tu correo.</Alert>}
       <form onSubmit={handleSubmit}>
         <TextField
           label="Correo Electrónico"
@@ -63,6 +75,15 @@ const VerifyCode = () => {
           Verificar
         </Button>
       </form>
+      <Button 
+        variant="outlined" 
+        fullWidth 
+        sx={{ mt: 2 }} 
+        onClick={handleResendCode}
+        disabled={!email}
+      >
+        Reenviar Código
+      </Button>
     </Box>
   );
 };
