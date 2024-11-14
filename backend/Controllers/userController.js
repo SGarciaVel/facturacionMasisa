@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
-const moment = require('moment');
+const moment = require('moment'); // Asegúrate de que esta línea solo aparezca una vez.
+
 
 // Función para generar un JWT
 const generateToken = (userId) => {
@@ -22,8 +23,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS,
     },
 });
-
-const moment = require('moment'); // Para manejo de fechas
 
 exports.registerUser = async (req, res) => {
     const { nombre, apellido, email, password, pais, fechaNacimiento } = req.body;
@@ -147,5 +146,18 @@ exports.loginUser = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error al iniciar sesión' });
+    }
+};
+
+exports.getUserData = async (req, res) => {
+    try {
+        const user = await pool.query('SELECT id, nombre, apellido, email FROM users WHERE id = $1', [req.userId]);
+        if (user.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.status(200).json(user.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener los datos del usuario' });
     }
 };
