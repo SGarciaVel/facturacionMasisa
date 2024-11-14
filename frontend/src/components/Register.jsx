@@ -53,6 +53,10 @@ const customStyles = {
     display: 'flex',
     alignItems: 'center',
   }),
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 9999,
+  }),
 };
 
 export default function Register() {

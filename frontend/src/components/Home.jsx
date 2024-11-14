@@ -14,12 +14,18 @@ import {
   IconButton,
   Paper,
   Avatar,
+  Grid,
+  Card,
+  CardContent,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   Home as HomeIcon,
   UploadFile as UploadFileIcon,
   Logout as LogoutIcon,
+  BarChart as BarChartIcon,
+  Settings as SettingsIcon,
+  Info as InfoIcon,
 } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
@@ -119,6 +125,24 @@ const Home = () => {
               </ListItemIcon>
               <ListItemText primary="Subir Archivo" />
             </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Estadísticas" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Configuración" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <InfoIcon />
+              </ListItemIcon>
+              <ListItemText primary="Acerca de" />
+            </ListItem>
           </List>
         </Drawer>
         <Box
@@ -131,14 +155,32 @@ const Home = () => {
           }}
         >
           <Toolbar />
-          <Paper elevation={3} sx={{ p: 4, textAlign: "center" }}>
-            <Typography variant="h6" gutterBottom>
-              Subir Archivo CSV
-            </Typography>
-            <Button variant="contained" color="primary">
-              Seleccionar Archivo
-            </Button>
-          </Paper>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Card elevation={3}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>
+                    Subir Archivo CSV
+                  </Typography>
+                  <Button variant="contained" color="primary">
+                    Seleccionar Archivo
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card elevation={3}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>
+                    Últimos Datos Subidos
+                  </Typography>
+                  <Typography variant="body2">
+                    No hay datos recientes. Sube un archivo CSV para comenzar.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </ThemeProvider>
