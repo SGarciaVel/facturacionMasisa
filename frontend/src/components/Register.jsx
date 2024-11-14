@@ -100,16 +100,8 @@ export default function Register() {
     }
   };
 
-  const handleResendCode = async () => {
-    try {
-      await axios.post('http://localhost:3000/api/users/resend-code', {
-        email: formData.email,
-      });
-      setResendSuccess('Código reenviado exitosamente. Revisa tu correo.');
-      setError('');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Error al reenviar el código');
-    }
+  const goToLogin = () => {
+    navigate('/login');
   };
 
   return (
@@ -234,10 +226,9 @@ export default function Register() {
                 variant="text"
                 fullWidth
                 sx={{ mt: 2 }}
-                onClick={handleResendCode}
-                disabled={!formData.email}
+                onClick={goToLogin}
               >
-                Reenviar Código
+                ¿Ya tienes cuenta? Inicia Sesión
               </Button>
             </Box>
           </Box>

@@ -10,33 +10,19 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Grid,
-  Paper,
-  IconButton,
   Divider,
-  Card,
-  CardContent,
+  IconButton,
+  Paper,
+  Avatar,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   Home as HomeIcon,
-  BarChart as BarChartIcon,
+  UploadFile as UploadFileIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
-import { Bar } from "react-chartjs-2";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const theme = createTheme({
   palette: {
@@ -55,84 +41,58 @@ const Home = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found');
-                return;
-            }
-
-            const response = await axios.get('http://localhost:3000/api/users/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Correcto encabezado para JWT
-                },
-            });
-            setUserName(`${response.data.nombre} ${response.data.apellido}`);
-        } catch (error) {
-            console.error('Error al obtener los datos del usuario:', error);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
         }
+
+        const response = await axios.get("http://localhost:3000/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserName(`${response.data.nombre} ${response.data.apellido}`);
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+      }
     };
 
     fetchUserData();
-}, []);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
 
-  const chartData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
-      {
-        label: "Ingresos",
-        data: [500, 800, 400, 700, 900, 800, 1000, 900, 750, 800, 600, 700],
-        backgroundColor: "rgba(0, 123, 255, 0.6)",
-      },
-      {
-        label: "Gastos",
-        data: [300, 400, 200, 500, 600, 700, 800, 650, 500, 600, 400, 500],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-      },
-    ],
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
-        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Dashboard
-            </Typography>
-            <Typography variant="body1" sx={{ mr: 2 }}>
-              Bienvenido/a, {userName}
-            </Typography>
-            <Button color="inherit" onClick={handleLogout}>
-              <LogoutIcon />
-              Cerrar Sesión
-            </Button>
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: "#3f51b5" }}>
+          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={() => setDrawerOpen(!drawerOpen)}
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                Dashboard
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="body1" sx={{ mr: 2 }}>
+                Bienvenido/a, {userName}
+              </Typography>
+              <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>
+                Cerrar Sesión
+              </Button>
+            </Box>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -155,9 +115,9 @@ const Home = () => {
             </ListItem>
             <ListItem button>
               <ListItemIcon>
-                <BarChartIcon />
+                <UploadFileIcon />
               </ListItemIcon>
-              <ListItemText primary="Estadísticas" />
+              <ListItemText primary="Subir Archivo" />
             </ListItem>
           </List>
         </Drawer>
@@ -171,34 +131,14 @@ const Home = () => {
           }}
         >
           <Toolbar />
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
-              <Paper elevation={3}>
-                <Typography
-                  variant="h6"
-                  align="center"
-                  gutterBottom
-                  sx={{ pt: 2 }}
-                >
-                  Gráfico de Ingresos y Gastos
-                </Typography>
-                <Bar data={chartData} />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card elevation={3}>
-                <CardContent>
-                  <Typography variant="h6">Información Rápida</Typography>
-                  <Typography variant="body2">
-                    Total de Ingresos: $12,000
-                  </Typography>
-                  <Typography variant="body2">
-                    Total de Gastos: $8,000
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <Paper elevation={3} sx={{ p: 4, textAlign: "center" }}>
+            <Typography variant="h6" gutterBottom>
+              Subir Archivo CSV
+            </Typography>
+            <Button variant="contained" color="primary">
+              Seleccionar Archivo
+            </Button>
+          </Paper>
         </Box>
       </Box>
     </ThemeProvider>
