@@ -128,7 +128,6 @@ exports.loginUser = async (req, res) => {
 
         const user = userResult.rows[0];
 
-        // Comparar la contraseña ingresada con la almacenada en la base de datos
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Contraseña incorrecta' });
@@ -137,7 +136,7 @@ exports.loginUser = async (req, res) => {
         // Generar el token JWT
         const token = generateToken(user.id);
 
-        // Si todo es correcto, responde con el token
+        // Si todo es ok, responde con el token
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso', 
             token, 

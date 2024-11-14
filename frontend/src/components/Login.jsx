@@ -106,7 +106,7 @@ export default function SignInSide() {
                 fullWidth
                 name="password"
                 label="Contraseña"
-                type={showPassword ? 'text' : 'password'} // Mostrar texto o contraseña
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
                 value={password}

@@ -6,9 +6,8 @@ exports.processCsv = (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No se proporcionó un archivo CSV.' });
     }
-    const filePath = req.file.path; // Ruta temporal del archivo cargado
+    const filePath = req.file.path;
 
-    // Lee y procesa el archivo CSV
     fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (data) => results.push(data))
@@ -16,7 +15,6 @@ exports.processCsv = (req, res) => {
             // Elimina el archivo cargado
             fs.unlinkSync(filePath);
 
-            // Enviar los datos procesados como respuesta
             res.status(200).json({
                 message: 'Archivo CSV procesado exitosamente',
                 data: results,

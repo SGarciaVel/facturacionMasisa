@@ -6,12 +6,12 @@ const authMiddleware = require('./middleware/authMiddleware');
 const csvRoutes = require('./Routes/csvRoutes'); // Importa las rutas de CSV
 
 const app = express();
-const PORT = 3000; // Puedes cambiar el puerto si lo necesitas
+const PORT = 3000;
 
 // Middleware
 // Configurar CORS
 app.use(cors({
-    origin: 'http://localhost:5173', // Reemplaza con tu puerto del frontend si es diferente
+    origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
 }));
@@ -19,9 +19,9 @@ app.use(cors({
 app.use(express.json());
 
 // Rutas
-app.use('/api/users', userRoutes); // Rutas de usuario
+app.use('/api/users', userRoutes);
 // Rutas de CSV
-app.use('/api/csv', csvRoutes); // Ruta de CSV
+app.use('/api/csv', csvRoutes);
 
 
 // Rutas protegidas

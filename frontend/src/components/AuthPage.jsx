@@ -114,7 +114,7 @@ const AuthPage = () => {
         setSuccess('Registro exitoso. Revisa tu correo para verificar tu cuenta.');
       } else if (view === 'verify') {
         await axios.post('http://localhost:3000/api/users/verify-code', {
-            code: formData.code, // Aquí enviamos únicamente el código
+            code: formData.code,
         });
         setView('login');
         setSuccess('Verificación exitosa. Ya puedes iniciar sesión.');

@@ -1,6 +1,5 @@
-// src/components/FileUpload.jsx
 import { useState } from 'react';
-import api from '../services/api';  // Importa el archivo api.js
+import api from '../services/api';
 import { Button, Box, Input, Text } from '@chakra-ui/react';
 
 const FileUpload = () => {
@@ -8,7 +7,7 @@ const FileUpload = () => {
   const [message, setMessage] = useState('');
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);  // Guardar el archivo seleccionado
+    setFile(e.target.files[0]);
   };
 
   const handleUpload = async (e) => {
@@ -17,7 +16,6 @@ const FileUpload = () => {
     formData.append('file', file);
 
     try {
-      // Realizar la solicitud de carga de archivo al backend
       const response = await api.post('/api/files/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

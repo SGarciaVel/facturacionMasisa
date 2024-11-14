@@ -94,7 +94,7 @@ export default function Register() {
       setSuccess(true);
       setError('');
       setDateError('');
-      navigate('/verify-code', { state: { email: formData.email } }); // Navega a VerifyCode con el email
+      navigate('/verify-code', { state: { email: formData.email } });
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar el usuario');
     }
