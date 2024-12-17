@@ -12,33 +12,40 @@ El sistema combina un backend robusto desarrollado en Node.js y un frontend mode
 -   Procesamiento de Datos: Genera gráficos y reportes estadísticos a partir de los datos cargados.
 -   Autenticación Segura: Implementación de inicio de sesión y registro con autenticación JWT.
 -   Visualización Intuitiva: Utiliza Material UI y React para ofrecer gráficos interactivos y una experiencia amigable.
-
 ## Tabla de Contenidos
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Instalación](#instalación)
+  - [Backend](#backend)
+  - [Python y Flask](#python-y-flask)
+  - [Frontend](#frontend)
+- [Docker](#docker)
+- [Construido con](#construido-con)
 - [Configuración](#configuración)
+  - [.env](#env)
 - [Rutas de la API](#rutas-de-la-api)
   - [Usuarios](#usuarios)
-  - [Carga de Archivos CSV](#carga-de-archivos-csv)
+  - [Carga de Archivos Excel](#carga-de-archivos-excel)
 - [Funcionalidades Actuales](#funcionalidades-actuales)
-- [Próximos Pasos](#próximos-pasos)
 - [Licencia](#licencia)
+- [Contribuir al Proyecto](#contribuir-al-proyecto)
+- [Agradecimientos](#agradecimientos)
+
 
 
 ## Tecnologías Utilizadas
+### Sistema Operativo
+
+-  **Ubuntu Jammy 22.04**: Distribución Linux
 
 ### Backend
 El sistema backend está compuesto por dos partes: una API desarrollada en Node.js para la autenticación y gestión de datos, y una API en Python para el procesamiento de archivos Excel y la generación de gráficos.
 Las tecnologías y paquetes utilizados en el servidor son:
 - **Node.js 18.19.1 y Express 4.18.2**: Framework para el servidor web.
-- **PostgreSQL**: Base de datos relacional para almacenamiento.
+- **PostgreSQL 13.7**: Base de datos relacional para almacenamiento.
 - **Sequelize 6.21.1**: ORM para manejar PostgreSQL.
 - **bcryptjs 2.4.3**: Encriptación de contraseñas.
 - **jsonwebtoken 9.0.2**: Autenticación y autorización mediante JWT.
 - **cors 2.8.5**: Permite compartir recursos entre dominios cruzados.
 - **dotenv 16.0.3**: Manejo de variables de entorno.
-- **multer 1.4.5-lts.1**: Manejo de archivos para la carga de CSV.
-- **csv-parser 3.0.0**: Procesamiento eficiente de archivos CSV.
 - **nodemailer 6.9.16**: Envío de correos electrónicos.
 - **pg 8.13.1 y pg-hstore 2.3.4**: Conector para PostgreSQL.
 
@@ -63,6 +70,11 @@ Las tecnologías utilizadas en la interfaz gráfica son:
 - **React-World-Flags 1.6.0**: Visualización de banderas internacionales.
 - **Vite 5.4.10**: Entorno de desarrollo rápido y eficiente.
 
+## Git clone
+```bash
+apt install git
+git clone https://github.com/SGarciaVel/facturacionMasisa/
+```
 ## Docker
 
 
@@ -71,7 +83,8 @@ Una vez situado en la raiz del proyecto, dirigirse al directorio docker y ejecut
 
 ```bash
 
-docker build -t facturacionMasisa:version1.0 .
+docker build -t 'nombre-imagen' .
+docker run -p 8888:80 -dti 'nombre-imagen'
 
 ```
 ## Construido con
@@ -148,7 +161,8 @@ EMAIL_PASS=abcd efgh ijkl mnop
 - Verificación de cuenta mediante código.
 - Inicio de sesión con autenticación JWT.
 - Rutas protegidas con verificación de token.
-- Carga y procesamiento de archivos CSV.
+- Carga y procesamiento de archivos XLSX.
+- Graficos procesados con API creada.
 - Interfaz de usuario consistente entre login y registro.
 
 ## Licencia
