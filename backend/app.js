@@ -11,7 +11,7 @@ const PORT = 3000;
 // Middleware
 // Configurar CORS
 // Declarar los orígenes permitidos
-const allowedOrigins = ['http://localhost:3000', 'http://146.83.198.35:1640'];
+const allowedOrigins = ['http://localhost:3000', 'http://146.83.198.35:1640', 'http://localhost:80'];
 
 // Configuración de CORS
 app.use(cors({
