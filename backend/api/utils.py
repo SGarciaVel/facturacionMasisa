@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import os
 
 def process_excel(filepath):
-    # Crear carpeta static si no existe
     static_dir = "static"
     os.makedirs(static_dir, exist_ok=True)
 

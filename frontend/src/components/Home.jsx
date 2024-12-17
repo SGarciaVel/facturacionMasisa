@@ -78,9 +78,13 @@ const Home = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:5000/process-excel", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/process-excel",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       // Procesar las URLs de los gráficos recibidas
       const { plan_graph, service_graph } = response.data;
@@ -132,7 +136,11 @@ const Home = () => {
               <Typography variant="body1" sx={{ mr: 2 }}>
                 Bienvenido/a, {userName}
               </Typography>
-              <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>
+              <Button
+                color="inherit"
+                onClick={handleLogout}
+                startIcon={<LogoutIcon />}
+              >
                 Cerrar Sesión
               </Button>
             </Box>
@@ -165,7 +173,10 @@ const Home = () => {
         </Drawer>
 
         {/* Main Content */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#f5f5f5" }}>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, backgroundColor: "#f5f5f5" }}
+        >
           <Toolbar />
           <Grid container spacing={3}>
             {/* Subir Archivo */}
@@ -197,7 +208,11 @@ const Home = () => {
                       <Typography variant="body1" color="textSecondary">
                         {selectedFile.name}
                       </Typography>
-                      <IconButton color="error" onClick={handleDeleteFile} sx={{ ml: 2 }}>
+                      <IconButton
+                        color="error"
+                        onClick={handleDeleteFile}
+                        sx={{ ml: 2 }}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Box>
@@ -208,7 +223,13 @@ const Home = () => {
                     color="secondary"
                     onClick={handleUpload}
                     disabled={loading}
-                    startIcon={loading ? <CircularProgress size={20} /> : <FileUploadIcon />}
+                    startIcon={
+                      loading ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        <FileUploadIcon />
+                      )
+                    }
                     sx={{ mt: 2 }}
                   >
                     Subir Archivo
@@ -225,7 +246,11 @@ const Home = () => {
                     Gráfico de Planes Tarifarios
                   </Typography>
                   {graphUrls.plan ? (
-                    <img src={graphUrls.plan} alt="Gráfico de Planes Tarifarios" style={{ maxWidth: "100%" }} />
+                    <img
+                      src={graphUrls.plan}
+                      alt="Gráfico de Planes Tarifarios"
+                      style={{ maxWidth: "100%" }}
+                    />
                   ) : (
                     <Typography variant="body2">
                       No hay gráfico generado. Sube un archivo para comenzar.
@@ -243,7 +268,11 @@ const Home = () => {
                     Gráfico de Clientes (Top 5 N° de Servicio)
                   </Typography>
                   {graphUrls.service ? (
-                    <img src={graphUrls.service} alt="Gráfico de Clientes" style={{ maxWidth: "100%" }} />
+                    <img
+                      src={graphUrls.service}
+                      alt="Gráfico de Clientes"
+                      style={{ maxWidth: "100%" }}
+                    />
                   ) : (
                     <Typography variant="body2">
                       No hay gráfico generado. Sube un archivo para comenzar.
