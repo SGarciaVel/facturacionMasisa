@@ -1,10 +1,17 @@
 # Facturación Masisa - Sistema de Gestión
 
-Este proyecto es un sistema completo de gestión de facturación diseñado para el área de telecomunicaciones de Masisa. Combina un backend robusto desarrollado en Node.js con un frontend moderno en React, proporcionando una solución integral para la revisión, análisis y visualización de datos de facturación.
+Este proyecto es un sistema completo de gestión de facturación diseñado específicamente para el área de telecomunicaciones de Masisa S.A.. La aplicación facilita la revisión, análisis y visualización de los datos de facturación de líneas corporativas, permitiendo a los usuarios gestionar la información con rapidez y eficiencia.
 
 El sistema incluye:
-- **Backend**: Manejo de registro, inicio de sesión y autenticación de usuarios mediante JWT, así como carga y procesamiento automatizado de archivos CSV.
+- **Backend**: Manejo de registro, inicio de sesión y autenticación de usuarios mediante JWT, así como carga y procesamiento automatizado de archivos XLSX.
 - **Frontend**: Interfaz gráfica para que los usuarios interactúen con el sistema, visualicen reportes y gestionen sus datos.
+
+El sistema combina un backend robusto desarrollado en Node.js y un frontend moderno en React, proporcionando una solución integral para la carga, procesamiento y visualización de datos:
+
+-   Carga Automatizada de Archivos: Permite la carga de archivos Excel/XLSX con información de facturación.
+-   Procesamiento de Datos: Genera gráficos y reportes estadísticos a partir de los datos cargados.
+-   Autenticación Segura: Implementación de inicio de sesión y registro con autenticación JWT.
+-   Visualización Intuitiva: Utiliza Material UI y React para ofrecer gráficos interactivos y una experiencia amigable.
 
 ## Tabla de Contenidos
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
@@ -20,84 +27,74 @@ El sistema incluye:
 
 ## Tecnologías Utilizadas
 
-- **Node.js 18.19.1 y Express 4.18.2**: Framework para el backend y manejo de rutas.
-- **PostgreSQL 13.7**: Base de datos relacional para almacenamiento de usuarios.
-- **JWT 9.0.2**: Autenticación de usuarios.
-- **bcrypt.js 2.4.3**: Encriptación de contraseñas.
-- **Nodemailer 6.9.16**: Envío de correos electrónicos.
-- **React 18.3.1 y MUI (Material-UI) 6.1.6**: Desarrollo del frontend con una interfaz moderna.
-- **React-Select 5.8.3**: Implementación de selectores dinámicos con banderas.
+### Backend
+El sistema backend está compuesto por dos partes: una API desarrollada en Node.js para la autenticación y gestión de datos, y una API en Python para el procesamiento de archivos Excel y la generación de gráficos.
+Las tecnologías y paquetes utilizados en el servidor son:
+- **Node.js 18.19.1 y Express 4.18.2**: Framework para el servidor web.
+- **PostgreSQL**: Base de datos relacional para almacenamiento.
+- **Sequelize 6.21.1**: ORM para manejar PostgreSQL.
+- **bcryptjs 2.4.3**: Encriptación de contraseñas.
+- **jsonwebtoken 9.0.2**: Autenticación y autorización mediante JWT.
+- **cors 2.8.5**: Permite compartir recursos entre dominios cruzados.
+- **dotenv 16.0.3**: Manejo de variables de entorno.
+- **multer 1.4.5-lts.1**: Manejo de archivos para la carga de CSV.
+- **csv-parser 3.0.0**: Procesamiento eficiente de archivos CSV.
+- **nodemailer 6.9.16**: Envío de correos electrónicos.
+- **pg 8.13.1 y pg-hstore 2.3.4**: Conector para PostgreSQL.
 
-## Instalación
+### Python y Flask:
 
-1. **Instalar Dependencias**:
-   
-   Instalar `Git`:
-   ```bash
-    apt-get install git
-   ```
-   Instalar `NodeJS`:
-   ```bash
-   sudo apt install nodejs
-   ```
+- **Python 3.10.12**: Lenguaje utilizado para desarrollar la API de procesamiento.
+- **Flask 3.0.0**: Microframework para la creación de la API.
+- **Flask-CORS 4.0.0**: Permite solicitudes entre dominios (CORS).
+- **matplotlib 3.8.0**: Generación de gráficos a partir de datos Excel.
+- **openpyxl 3.1.2**: Procesamiento y lectura de archivos Excel (XLSX).
 
-3. **Clonar el repositorio**:
-    ```bash
-    git clone https://github.com/SGarciaVel/facturacionMasisa.git
-    cd facturacionMasisa/backend
-    ```
+### Frontend
 
-4. **Instalar dependencias**:
-    ```bash
-    npm install
-    ```
+Las tecnologías utilizadas en la interfaz gráfica son:
 
-5. **Configurar la base de datos**:
-   - Asegúrate de tener PostgreSQL configurado y en funcionamiento.
-   - Crea una base de datos llamada `facturacion_masisa` o según tu preferencia.
-   - Usa el siguiente esquema SQL para crear la tabla `users`:
-     ```sql
-     CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        nombre VARCHAR(50) NOT NULL,
-        apellido VARCHAR(50) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        pais VARCHAR(50) NOT NULL,
-        fecha_nacimiento DATE NOT NULL,
-        verification_code VARCHAR(10),
-        verification_code_expiration TIMESTAMP,
-        is_verified BOOLEAN DEFAULT false
-      );
-      ```
+- **React 18.3.1 y React DOM 18.3.1**: Librería para construir la interfaz de usuario.
+- **Material-UI (MUI) 6.1.6**: Framework de componentes modernos de React.
+- **Axios 1.7.7**: Cliente HTTP para comunicarse con el backend.
+- **Chart.js 4.4.6 y React-ChartJS-2 5.2.0**: Visualización de datos mediante gráficos.
+- **Framer Motion 11.11.11**: Animaciones fluidas y optimizadas para React.
+- **React-Router-Dom 6.27.0**: Manejo de navegación en la aplicación.
+- **React-World-Flags 1.6.0**: Visualización de banderas internacionales.
+- **Vite 5.4.10**: Entorno de desarrollo rápido y eficiente.
 
-6. **Configurar variables de entorno**:
-   - Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
-     ```env
-     EMAIL_USER=tu_correo@gmail.com
-     EMAIL_PASS=tu_contraseña_de_aplicación
-     JWT_SECRET=clave_secreta
-     JWT_EXPIRES_IN=1h
-     DB_USER=tu_usuario_db
-     DB_PASSWORD=tu_contraseña_db
-     DB_HOST=tu_host_db
-     DB_PORT=5432
-     DB_DATABASE=facturacion_masisa
-     ```
+## Docker
 
-7. **Iniciar el servidor**:
-   - Para desarrollo:
-     ```bash
-     npm run dev
-     ```
-   - Para producción:
-     ```bash
-     npm start
-     ```
+
+Con una terminal situarse dentro del directorio raiz donde fue clonado este repositorio; `~/git/facturacionMasisa/`.
+Una vez situado en la raiz del proyecto, dirigirse al directorio docker y ejecutar lo siguiente para construir la imagen docker:
+
+```bash
+
+docker build -t facturacionMasisa:version1.0 .
+
+```
+## Construido con
+
+- [**Node.js**](https://nodejs.org/en) - Backend
+- [**Express**](https://expressjs.com/) - Framework para el servidor
+- [**PostgreSQL**](https://www.postgresql.org/) - Base de datos
+- [**React**](https://react.dev/) - Frontend
+- [**Material-UI**](https://mui.com/) - Componentes de interfaz de usuario
+- [**Docker**](https://www.docker.com/) - Contenedor para el despliegue
 
 ## Configuración
 
 Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegurar las rutas protegidas. Asegúrate de configurar correctamente el archivo `.env`.
+
+### .env
+```bash
+JWT_SECRET=contraseña_secreta
+JWT_EXPIRES_IN=1h
+EMAIL_USER=correoejemplo@correo.com
+EMAIL_PASS=abcd efgh ijkl mnop
+
+```
 
 ## Rutas de la API
 
@@ -139,19 +136,11 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
       "password": "passwordSeguro123"
     }
     ```
-### Carga de Archivos CSV
+### Carga de Archivos Excel
 
-- **Subir Archivo CSV**
-  - **POST** `/api/csv/upload`
-  - **Descripción**: Permite subir y procesar un archivo CSV.
-  - **Encabezado**: `Content-Type: multipart/form-data`
-  - **Respuesta Exitosa**:
-    ```json
-    {
-      "message": "Archivo CSV procesado exitosamente",
-      "data": [...]
-    }
-    ```
+- **Subir Archivo XLSX**
+  - **POST** `/process-excel`
+  - **Descripción**: Carga un archivo Excel y procesa la información para generar gráficos.
 
 ## Funcionalidades Actuales
 
@@ -162,26 +151,18 @@ Este proyecto utiliza un esquema de autenticación basado en **JWT** para asegur
 - Carga y procesamiento de archivos CSV.
 - Interfaz de usuario consistente entre login y registro.
 
-## Próximos Pasos
-
-- **Frontend**:
-  - Mejorar la visualización de datos con gráficos y tablas interactivas.
-  - Implementar una sección de perfil para que los usuarios puedan gestionar sus datos.
-  
-- **Visualización de Datos**:
-  - Implementar gráficos e informes detallados para el análisis de facturación.
-
-- **Notificaciones**:
-  - Alertas automáticas para inconsistencias en los datos de facturación.
-
-- **Pruebas**:
-  - Implementar pruebas unitarias e integrales para asegurar la calidad del software.
-
-
-
 ## Licencia
 
 Todos los derechos reservados. Este proyecto no tiene licencia pública. Para consultas sobre uso o distribución, por favor contacta a [sebastian.garcia1601@alumnos.ubiobio.cl].
+
+
+## Contribuir al Proyecto
+
+Si deseas contribuir al proyecto, por favor revisa las instrucciones en CONTRIBUTING.md.
+
+## Agradecimientos
+
+Este proyecto fue desarrollado como parte del Sistema de apoyo al Análisis de Facturación de Líneas Celulares Corporativas para Masisa S.A. en el marco de la titulación de Ingeniería en Ejecución en Computación e Informática.
 
 
 
