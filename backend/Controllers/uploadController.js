@@ -9,8 +9,6 @@ exports.uploadFile = async (req, res) => {
             return res.status(400).json({ message: "No se proporcionó un archivo." });
         }
 
-        // Procesa archivo CSV aquí, como lectura etc
-        // Placeholder para una función de procesamiento
 
         res.status(200).json({ message: "Archivo cargado exitosamente." });
     } catch (error) {

@@ -12,11 +12,10 @@ import {
   ListItemText,
   Divider,
   IconButton,
-  Paper,
-  Avatar,
   Grid,
   Card,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -44,6 +43,9 @@ const theme = createTheme({
 const Home = () => {
   const [userName, setUserName] = useState("Usuario");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [graphUrl, setGraphUrl] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -67,6 +69,36 @@ const Home = () => {
 
     fetchUserData();
   }, []);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      alert("Por favor selecciona un archivo.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      setLoading(true);
+      const response = await axios.post("http://localhost:5000/process-excel", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        responseType: "blob",
+      });
+
+      const url = URL.createObjectURL(response.data);
+      setGraphUrl(url);
+    } catch (error) {
+      console.error("Error al subir el archivo:", error);
+      alert("Hubo un error al procesar el archivo.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -160,10 +192,29 @@ const Home = () => {
               <Card elevation={3}>
                 <CardContent>
                   <Typography variant="h5" gutterBottom>
-                    Subir Archivo CSV
+                    Subir Archivo
                   </Typography>
-                  <Button variant="contained" color="primary">
+                  <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => document.getElementById("fileInput").click()}
+                  >
                     Seleccionar Archivo
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleUpload}
+                    disabled={loading}
+                    sx={{ ml: 2 }}
+                  >
+                    {loading ? <CircularProgress size={24} /> : "Subir"}
                   </Button>
                 </CardContent>
               </Card>
@@ -172,11 +223,15 @@ const Home = () => {
               <Card elevation={3}>
                 <CardContent>
                   <Typography variant="h5" gutterBottom>
-                    Últimos Datos Subidos
+                    Gráfico Generado
                   </Typography>
-                  <Typography variant="body2">
-                    No hay datos recientes. Sube un archivo CSV para comenzar.
-                  </Typography>
+                  {graphUrl ? (
+                    <img src={graphUrl} alt="Gráfico" style={{ maxWidth: "100%" }} />
+                  ) : (
+                    <Typography variant="body2">
+                      No hay gráfico generado. Sube un archivo para comenzar.
+                    </Typography>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
