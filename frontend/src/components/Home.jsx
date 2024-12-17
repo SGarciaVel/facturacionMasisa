@@ -22,30 +22,26 @@ import {
   Home as HomeIcon,
   UploadFile as UploadFileIcon,
   Logout as LogoutIcon,
-  BarChart as BarChartIcon,
-  Settings as SettingsIcon,
-  Info as InfoIcon,
+  FileUpload as FileUploadIcon,
+  InsertDriveFile as InsertDriveFileIcon,
+  Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#004d40",
-    },
-    secondary: {
-      main: "#f57c00",
-    },
+    primary: { main: "#004d40" },
+    secondary: { main: "#f57c00" },
   },
 });
 
 const Home = () => {
   const [userName, setUserName] = useState("Usuario");
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [graphUrl, setGraphUrl] = useState("");
+  const [graphUrls, setGraphUrls] = useState({ plan: "", service: "" });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -55,11 +51,8 @@ const Home = () => {
           console.error("No token found");
           return;
         }
-
         const response = await axios.get("http://localhost:3000/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUserName(`${response.data.nombre} ${response.data.apellido}`);
       } catch (error) {
@@ -87,17 +80,28 @@ const Home = () => {
       setLoading(true);
       const response = await axios.post("http://localhost:5000/process-excel", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        responseType: "blob",
       });
 
-      const url = URL.createObjectURL(response.data);
-      setGraphUrl(url);
+      // Procesar las URLs de los gráficos recibidas
+      const { plan_graph, service_graph } = response.data;
+      setGraphUrls({
+        plan: `http://localhost:5000/${plan_graph}`,
+        service: `http://localhost:5000/${service_graph}`,
+      });
     } catch (error) {
       console.error("Error al subir el archivo:", error);
       alert("Hubo un error al procesar el archivo.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDeleteFile = () => {
+    setSelectedFile(null);
+  };
+
+  const handleReload = () => {
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -108,7 +112,8 @@ const Home = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
-        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1, backgroundColor: "#3f51b5" }}>
+        {/* AppBar */}
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <IconButton
@@ -133,61 +138,37 @@ const Home = () => {
             </Box>
           </Toolbar>
         </AppBar>
+
+        {/* Drawer */}
         <Drawer
           variant="permanent"
           open={drawerOpen}
           sx={{
-            width: 240,
+            width: drawerOpen ? 240 : 0,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: 240, boxSizing: "border-box" },
+            [`& .MuiDrawer-paper`]: {
+              width: drawerOpen ? 240 : 0,
+              boxSizing: "border-box",
+            },
           }}
         >
           <Toolbar />
           <Divider />
           <List>
-            <ListItem button>
+            <ListItem button onClick={handleReload}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Inicio" />
             </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <UploadFileIcon />
-              </ListItemIcon>
-              <ListItemText primary="Subir Archivo" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Estadísticas" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Configuración" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <InfoIcon />
-              </ListItemIcon>
-              <ListItemText primary="Acerca de" />
-            </ListItem>
           </List>
         </Drawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            backgroundColor: "#f5f5f5",
-            minHeight: "100vh",
-          }}
-        >
+
+        {/* Main Content */}
+        <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#f5f5f5" }}>
           <Toolbar />
           <Grid container spacing={3}>
+            {/* Subir Archivo */}
             <Grid item xs={12} md={6}>
               <Card elevation={3}>
                 <CardContent>
@@ -201,32 +182,68 @@ const Home = () => {
                     onChange={handleFileChange}
                   />
                   <Button
-                    variant="contained"
-                    color="primary"
+                    variant="outlined"
+                    startIcon={<UploadFileIcon />}
                     onClick={() => document.getElementById("fileInput").click()}
+                    sx={{ mr: 2 }}
                   >
                     Seleccionar Archivo
                   </Button>
+
+                  {/* Vista previa y botón Eliminar */}
+                  {selectedFile && (
+                    <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
+                      <InsertDriveFileIcon color="action" sx={{ mr: 1 }} />
+                      <Typography variant="body1" color="textSecondary">
+                        {selectedFile.name}
+                      </Typography>
+                      <IconButton color="error" onClick={handleDeleteFile} sx={{ ml: 2 }}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  )}
+
                   <Button
                     variant="contained"
                     color="secondary"
                     onClick={handleUpload}
                     disabled={loading}
-                    sx={{ ml: 2 }}
+                    startIcon={loading ? <CircularProgress size={20} /> : <FileUploadIcon />}
+                    sx={{ mt: 2 }}
                   >
-                    {loading ? <CircularProgress size={24} /> : "Subir"}
+                    Subir Archivo
                   </Button>
                 </CardContent>
               </Card>
             </Grid>
+
+            {/* Gráfico de Planes Tarifarios */}
             <Grid item xs={12} md={6}>
               <Card elevation={3}>
                 <CardContent>
                   <Typography variant="h5" gutterBottom>
-                    Gráfico Generado
+                    Gráfico de Planes Tarifarios
                   </Typography>
-                  {graphUrl ? (
-                    <img src={graphUrl} alt="Gráfico" style={{ maxWidth: "100%" }} />
+                  {graphUrls.plan ? (
+                    <img src={graphUrls.plan} alt="Gráfico de Planes Tarifarios" style={{ maxWidth: "100%" }} />
+                  ) : (
+                    <Typography variant="body2">
+                      No hay gráfico generado. Sube un archivo para comenzar.
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Gráfico de Clientes */}
+            <Grid item xs={12} md={6}>
+              <Card elevation={3}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>
+                    Gráfico de Clientes (Top 5 N° de Servicio)
+                  </Typography>
+                  {graphUrls.service ? (
+                    <img src={graphUrls.service} alt="Gráfico de Clientes" style={{ maxWidth: "100%" }} />
                   ) : (
                     <Typography variant="body2">
                       No hay gráfico generado. Sube un archivo para comenzar.
