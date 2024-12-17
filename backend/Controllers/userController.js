@@ -138,10 +138,8 @@ exports.loginUser = async (req, res) => {
 
         // Si todo es ok, responde con el token
         res.status(200).json({ 
-            message: 'Inicio de sesión exitoso', 
-            token, 
-            user: { id: user.id, email: user.email } 
-        });
+            message: 'Inicio de sesión exitoso',            token, 
+            user: { id: user.id, email: user.email }         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error al iniciar sesión' });

@@ -14,7 +14,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['STATIC_FOLDER'] = STATIC_FOLDER
 
 # Permitir CORS para el frontend
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:80", "http://146.83.198.35:1640"]}})
 
 # Crear carpetas si no existen
 if not os.path.exists(UPLOAD_FOLDER):
@@ -29,34 +29,45 @@ def allowed_file(filename):
 # Endpoint para procesar archivos Excel
 @app.route('/process-excel', methods=['POST'])
 def process_excel_file():
+    print("Inicio del procesamiento de /process-excel")
+
     if 'file' not in request.files:
+        print("No se envió ningún archivo")
         return jsonify({'error': 'No se envió ningún archivo'}), 400
 
     file = request.files['file']
+    print(f"Archivo recibido: {file.filename}")
+
     if file.filename == '':
+        print("Nombre del archivo vacío")
         return jsonify({'error': 'No se seleccionó ningún archivo'}), 400
 
     if file and allowed_file(file.filename):
-        # Guardar el archivo en la carpeta uploads
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+        print(f"Guardando archivo en: {filepath}")
 
-        # Procesar el archivo Excel
         try:
-            graph_paths = process_excel(filepath)  # Genera los gráficos
+            file.save(filepath)
+            print(f"Archivo guardado correctamente: {filepath}")
 
-            # Devolver URLs accesibles de los gráficos
+            graph_paths = process_excel(filepath)
+            print(f"Gráficos generados en rutas: {graph_paths}")
+
             response = {
                 'plan_graph': f"/static/{os.path.basename(graph_paths['plan_graph'])}",
                 'service_graph': f"/static/{os.path.basename(graph_paths['service_graph'])}"
             }
+            print(f"Respuesta generada: {response}")
             return jsonify(response), 200
 
         except Exception as e:
+            print(f"Error al procesar el archivo: {str(e)}")
             return jsonify({'error': str(e)}), 500
 
+    print("El archivo no es permitido o está vacío")
     return jsonify({'error': 'Archivo no permitido'}), 400
+
 
 # Ruta para servir archivos estáticos desde la carpeta static
 @app.route('/static/<path:filename>')

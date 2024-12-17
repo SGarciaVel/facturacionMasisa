@@ -10,11 +10,23 @@ const PORT = 3000;
 
 // Middleware
 // Configurar CORS
+// Declarar los orígenes permitidos
+const allowedOrigins = ['http://localhost:3000', 'http://146.83.198.35:1640'];
+
+// Configuración de CORS
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+
 
 app.use(express.json());
 
